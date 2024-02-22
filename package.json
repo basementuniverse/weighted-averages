@@ -1,0 +1,29 @@
+{
+  "name": "@basementuniverse/weighted-averages",
+  "version": "0.0.1",
+  "description": "Various weighted average functions",
+  "main": "build/index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.node.json && tsc -p tsconfig.browser.json",
+    "test": "jest"
+  },
+  "keywords": [
+    "average",
+    "weighted",
+    "mean",
+    "geometric",
+    "harmonic"
+  ],
+  "author": "Gordon Larrigan <gordonlarrigan@gmail.com> (https://gordonlarrigan.com)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/basementuniverse/weighted-averages.git"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.10",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.3.2"
+  }
+}

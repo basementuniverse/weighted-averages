@@ -1,0 +1,142 @@
+<style>
+
+label {
+  display: inline-block;
+  width: 300px;
+}
+
+</style>
+<script type="module">
+
+import * as w from './build/browser/index.js';
+
+window.weightedAverages = w;
+
+</script>
+
+<div id="inputs"></div>
+
+<button onclick="javascript:add()">Add</button>
+<button onclick="javascript:remove()">Remove</button>
+
+Min: <input id="min" type="number" />
+
+<hr />
+
+<div id="output">
+  <label>Weighted arithmetic mean:</label>
+  <progress
+    id="output-1"
+    class="output"
+    max="100" value="50"
+  ></progress>
+  <br />
+
+  <label>Weighted geometric mean:</label>
+  <progress
+    id="output-2"
+    class="output"
+    max="100" value="50"
+  ></progress>
+  <br />
+
+  <label>Inverse-weighted geometric mean:</label>
+  <progress
+    id="output-3"
+    class="output"
+    max="100" value="50"
+  ></progress>
+  <br />
+
+  <label>Weighted harmonic mean:</label>
+  <progress
+    id="output-4"
+    class="output"
+    max="100" value="50"
+  ></progress>
+  <br />
+
+  <label>Inverse-weighted harmonic mean:</label>
+  <progress
+    id="output-5"
+    class="output"
+    max="100" value="50"
+  ></progress>
+  <br />
+</div>
+
+<script>
+
+const output1 = document.querySelector('#output-1');
+const output2 = document.querySelector('#output-2');
+const output3 = document.querySelector('#output-3');
+const output4 = document.querySelector('#output-4');
+const output5 = document.querySelector('#output-5');
+
+function update() {
+  const values = [
+    ...document.querySelectorAll('#inputs input[type=range].value')
+  ].map(e => parseFloat(e.value));
+  const weights = [
+    ...document.querySelectorAll('#inputs input[type=range].weight')
+  ].map(e => parseFloat(e.value));
+
+  const min = document.querySelector('#min').value
+    ? parseFloat(document.querySelector('#min').value)
+    : Number.EPSILON;
+
+  const w = window.weightedAverages;
+
+  const o1 = w.weightedArithmeticMean(values, weights);
+  const o2 = w.weightedGeometricMean(values, weights, min);
+  const o3 = w.inverseWeightedGeometricMean(values, weights, min, 1);
+  const o4 = w.weightedHarmonicMean(values, weights);
+  const o5 = w.inverseWeightedHarmonicMean(values, weights, 1);
+
+  console.table([{
+    values: values.join(','),
+    weights: weights.join(','),
+    arithmetic: o1,
+    geometric: o2,
+    inverseGeometric: o3,
+    harmonic: o4,
+    inverseHarmonic: o5,
+  }]);
+
+  output1.value = o1 * 100;
+  output2.value = o2 * 100;
+  output3.value = o3 * 100;
+  output4.value = o4 * 100;
+  output5.value = o5 * 100;
+}
+
+function add() {
+  const container = document.querySelector('#inputs');
+  const value = document.createElement('div');
+  value.appendChild(document.createTextNode('value'));
+  value.appendChild(slider('value', 0.5));
+  value.appendChild(document.createTextNode('weight'));
+  value.appendChild(slider('weight', 1));
+  container.appendChild(value);
+}
+
+function remove() {
+  const container = document.querySelector('#inputs');
+  if (container.lastChild) {
+    container.removeChild(container.lastChild);
+  }
+}
+
+function slider(className, value) {
+  const slider = document.createElement('input');
+  slider.setAttribute('class', className);
+  slider.setAttribute('type', 'range');
+  slider.setAttribute('min', 0);
+  slider.setAttribute('max', 1);
+  slider.setAttribute('step', 'any');
+  slider.setAttribute('value', value);
+  slider.addEventListener('change', update);
+  return slider;
+}
+
+</script>
